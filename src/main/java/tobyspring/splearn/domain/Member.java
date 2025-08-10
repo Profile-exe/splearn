@@ -21,6 +21,7 @@ public class Member {
         this.email = Objects.requireNonNull(email);
         this.nickname = Objects.requireNonNull(nickname);
         this.passwordHash = Objects.requireNonNull(passwordHash);
+
         this.status = MemberStatus.PENDING;
     }
 
