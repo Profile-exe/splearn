@@ -24,7 +24,7 @@ class MemberTest {
                 return encode(password).equals(passwordHash);
             }
         };
-        member = Member.create("test@splearn.app", "DDING", "secret", passwordEncoder);
+        member = Member.create(new MemberCreateRequest("test@splearn.app", "DDING", "secret"), passwordEncoder);
     }
 
     @Test
@@ -91,5 +91,18 @@ class MemberTest {
         member.changePassword("changeSecret", passwordEncoder);
 
         assertThat(member.verifyPassword("changeSecret", passwordEncoder)).isTrue();
+    }
+
+    @Test
+    void isActive() {
+        assertThat(member.isActive()).isFalse();
+
+        member.activate();
+
+        assertThat(member.isActive()).isTrue();
+
+        member.deactivate();
+
+        assertThat(member.isActive()).isFalse();
     }
 }
