@@ -24,11 +24,11 @@ class MemberTest {
                 return encode(password).equals(passwordHash);
             }
         };
-        member = Member.create(new MemberCreateRequest("test@splearn.app", "DDING", "secret"), passwordEncoder);
+        member = Member.register(new MemberRegisterRequest("test@splearn.app", "DDING", "secret"), passwordEncoder);
     }
 
     @Test
-    void createMember() {
+    void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
 
