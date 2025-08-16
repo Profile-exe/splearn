@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import tobyspring.splearn.application.MemberService;
@@ -74,6 +75,11 @@ class MemberRegisterManualTest {
         public Member save(Member member) {
             ReflectionTestUtils.setField(member, "id", 1L);
             return member;
+        }
+
+        @Override
+        public Optional<Member> findByEmail(Email email) {
+            return Optional.empty();
         }
     }
 
