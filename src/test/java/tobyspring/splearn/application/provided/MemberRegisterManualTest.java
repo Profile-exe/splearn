@@ -18,7 +18,7 @@ import tobyspring.splearn.domain.Member;
 import tobyspring.splearn.domain.MemberFixture;
 import tobyspring.splearn.domain.MemberStatus;
 
-class MemberRegisterTest {
+class MemberRegisterManualTest {
 
     @Test
     void registerTestStub() {
