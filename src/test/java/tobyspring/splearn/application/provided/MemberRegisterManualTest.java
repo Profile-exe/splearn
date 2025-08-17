@@ -1,14 +1,16 @@
 package tobyspring.splearn.application.provided;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import tobyspring.splearn.application.MemberService;
@@ -21,10 +23,23 @@ import tobyspring.splearn.domain.MemberStatus;
 
 class MemberRegisterManualTest {
 
+    MemberRepository memberRepository;
+
+    @BeforeEach
+    void setUp() {
+        memberRepository = mock(MemberRepository.class);
+        // save() 호출될 때 member의 ID를 1L로 만들기
+        when(memberRepository.save(any(Member.class))).thenAnswer(i -> {
+            Member member = i.getArgument(0);
+            ReflectionTestUtils.setField(member, "id", 1L);
+            return member;
+        });
+    }
+
     @Test
     void registerTestStub() {
         MemberRegister memberRegister = new MemberService(
-                new MemberRepositoryStub(),
+                memberRepository,
                 new EmailSenderStub(),
                 MemberFixture.createPasswordEncoder()
         );
@@ -39,7 +54,7 @@ class MemberRegisterManualTest {
     void registerTestMock() {
         EmailSenderMock emailSenderMock = new EmailSenderMock();
         MemberRegister memberRegister = new MemberService(
-                new MemberRepositoryStub(),
+                memberRepository,
                 emailSenderMock,
                 MemberFixture.createPasswordEncoder()
         );
@@ -56,8 +71,9 @@ class MemberRegisterManualTest {
     @Test
     void registerTestMockito() {
         EmailSender emailSenderMock = mock(EmailSender.class);
+
         MemberRegister memberRegister = new MemberService(
-                new MemberRepositoryStub(),
+                memberRepository,
                 emailSenderMock,
                 MemberFixture.createPasswordEncoder()
         );
@@ -68,19 +84,6 @@ class MemberRegisterManualTest {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
 
         verify(emailSenderMock).send(eq(member.getEmail()), anyString(), anyString());
-    }
-
-    static class MemberRepositoryStub implements MemberRepository {
-        @Override
-        public Member save(Member member) {
-            ReflectionTestUtils.setField(member, "id", 1L);
-            return member;
-        }
-
-        @Override
-        public Optional<Member> findByEmail(Email email) {
-            return Optional.empty();
-        }
     }
 
     static class EmailSenderStub implements EmailSender {
