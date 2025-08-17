@@ -13,7 +13,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-import tobyspring.splearn.application.MemberService;
+import tobyspring.splearn.application.MemberModifyService;
+import tobyspring.splearn.application.MemberQueryService;
 import tobyspring.splearn.application.required.EmailSender;
 import tobyspring.splearn.application.required.MemberRepository;
 import tobyspring.splearn.domain.Email;
@@ -24,6 +25,7 @@ import tobyspring.splearn.domain.MemberStatus;
 class MemberRegisterManualTest {
 
     MemberRepository memberRepository;
+    MemberFinder memberFinder;
 
     @BeforeEach
     void setUp() {
@@ -34,11 +36,14 @@ class MemberRegisterManualTest {
             ReflectionTestUtils.setField(member, "id", 1L);
             return member;
         });
+
+        memberFinder = new MemberQueryService(memberRepository);
     }
 
     @Test
     void registerTestStub() {
-        MemberRegister memberRegister = new MemberService(
+        MemberRegister memberRegister = new MemberModifyService(
+                memberFinder,
                 memberRepository,
                 new EmailSenderStub(),
                 MemberFixture.createPasswordEncoder()
@@ -53,7 +58,8 @@ class MemberRegisterManualTest {
     @Test
     void registerTestMock() {
         EmailSenderMock emailSenderMock = new EmailSenderMock();
-        MemberRegister memberRegister = new MemberService(
+        MemberRegister memberRegister = new MemberModifyService(
+                memberFinder,
                 memberRepository,
                 emailSenderMock,
                 MemberFixture.createPasswordEncoder()
@@ -72,7 +78,8 @@ class MemberRegisterManualTest {
     void registerTestMockito() {
         EmailSender emailSenderMock = mock(EmailSender.class);
 
-        MemberRegister memberRegister = new MemberService(
+        MemberRegister memberRegister = new MemberModifyService(
+                memberFinder,
                 memberRepository,
                 emailSenderMock,
                 MemberFixture.createPasswordEncoder()

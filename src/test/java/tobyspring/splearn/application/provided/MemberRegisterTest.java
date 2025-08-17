@@ -3,6 +3,7 @@ package tobyspring.splearn.application.provided;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,7 @@ import tobyspring.splearn.domain.MemberStatus;
 @SpringBootTest
 @Transactional
 @Import(SplearnTestConfiguration.class)
-record MemberRegisterTest(MemberRegister memberRegister) {
+record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityManager) {
     @Test
     void register() {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
@@ -36,6 +37,18 @@ record MemberRegisterTest(MemberRegister memberRegister) {
                 .isInstanceOf(DuplicateEmailException.class);
     }
     
+    @Test
+    void activate() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();  // IDENTITY 채번 전략으로 MySQL에서는 flush 없이도 insert 쿼리가 나감 (save 호출 시 persist 에서 insert 쿼리 나감)
+        entityManager.clear();
+
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+    }
+
     @Test
     void memberRegisterRequestFail() {
         thrownByRequest(new MemberRegisterRequest("invalid email", "DDING", "longsecret"));
