@@ -51,12 +51,12 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
 
     @Test
     void memberRegisterRequestFail() {
-        thrownByRequest(new MemberRegisterRequest("invalid email", "DDING", "longsecret"));
-        thrownByRequest(new MemberRegisterRequest("test@example.com", "o", "longsecret"));
-        thrownByRequest(new MemberRegisterRequest("test@example.com", "DDING", "short"));
+        checkValidation(new MemberRegisterRequest("invalid email", "DDING", "longsecret"));
+        checkValidation(new MemberRegisterRequest("test@example.com", "o", "longsecret"));
+        checkValidation(new MemberRegisterRequest("test@example.com", "DDING", "short"));
     }
 
-    private void thrownByRequest(MemberRegisterRequest invalidRequest) {
+    private void checkValidation(MemberRegisterRequest invalidRequest) {
         assertThatThrownBy(() -> memberRegister.register(invalidRequest))
                 .isInstanceOf(ConstraintViolationException.class);
     }
