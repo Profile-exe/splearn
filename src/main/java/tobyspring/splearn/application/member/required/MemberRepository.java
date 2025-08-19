@@ -2,8 +2,8 @@ package tobyspring.splearn.application.member.required;
 
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
-import tobyspring.splearn.domain.shared.Email;
 import tobyspring.splearn.domain.member.Member;
+import tobyspring.splearn.domain.shared.Email;
 
 /**
  * 회원 정보를 저장하거나 조회한다

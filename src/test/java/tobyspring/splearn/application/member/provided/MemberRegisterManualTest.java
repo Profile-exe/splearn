@@ -17,10 +17,10 @@ import tobyspring.splearn.application.member.MemberModifyService;
 import tobyspring.splearn.application.member.MemberQueryService;
 import tobyspring.splearn.application.member.required.EmailSender;
 import tobyspring.splearn.application.member.required.MemberRepository;
-import tobyspring.splearn.domain.shared.Email;
 import tobyspring.splearn.domain.member.Member;
 import tobyspring.splearn.domain.member.MemberFixture;
 import tobyspring.splearn.domain.member.MemberStatus;
+import tobyspring.splearn.domain.shared.Email;
 
 class MemberRegisterManualTest {
 
