@@ -8,11 +8,11 @@ import tobyspring.splearn.application.provided.MemberFinder;
 import tobyspring.splearn.application.provided.MemberRegister;
 import tobyspring.splearn.application.required.EmailSender;
 import tobyspring.splearn.application.required.MemberRepository;
-import tobyspring.splearn.domain.DuplicateEmailException;
-import tobyspring.splearn.domain.Email;
-import tobyspring.splearn.domain.Member;
-import tobyspring.splearn.domain.MemberRegisterRequest;
-import tobyspring.splearn.domain.PasswordEncoder;
+import tobyspring.splearn.domain.member.DuplicateEmailException;
+import tobyspring.splearn.domain.shared.Email;
+import tobyspring.splearn.domain.member.Member;
+import tobyspring.splearn.domain.member.MemberRegisterRequest;
+import tobyspring.splearn.domain.member.PasswordEncoder;
 
 @Service
 @Transactional

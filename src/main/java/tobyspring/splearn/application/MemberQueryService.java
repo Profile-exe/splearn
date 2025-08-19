@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import tobyspring.splearn.application.provided.MemberFinder;
 import tobyspring.splearn.application.required.MemberRepository;
-import tobyspring.splearn.domain.Member;
+import tobyspring.splearn.domain.member.Member;
 
 @Service
 @Transactional

@@ -1,5 +1,8 @@
 package tobyspring.splearn.domain;
 
+import tobyspring.splearn.domain.member.MemberRegisterRequest;
+import tobyspring.splearn.domain.member.PasswordEncoder;
+
 public class MemberFixture {
     public static MemberRegisterRequest createMemberRegisterRequest() {
         return new MemberRegisterRequest("test@splearn.app", "DDING", "verysecret");

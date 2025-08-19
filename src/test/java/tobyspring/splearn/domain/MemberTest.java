@@ -8,6 +8,9 @@ import static tobyspring.splearn.domain.MemberFixture.createPasswordEncoder;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tobyspring.splearn.domain.member.Member;
+import tobyspring.splearn.domain.member.MemberStatus;
+import tobyspring.splearn.domain.member.PasswordEncoder;
 
 class MemberTest {
     Member member;
