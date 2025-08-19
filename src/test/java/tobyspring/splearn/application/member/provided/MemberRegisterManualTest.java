@@ -1,4 +1,4 @@
-package tobyspring.splearn.application.provided;
+package tobyspring.splearn.application.member.provided;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -13,10 +13,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-import tobyspring.splearn.application.MemberModifyService;
-import tobyspring.splearn.application.MemberQueryService;
-import tobyspring.splearn.application.required.EmailSender;
-import tobyspring.splearn.application.required.MemberRepository;
+import tobyspring.splearn.application.member.MemberModifyService;
+import tobyspring.splearn.application.member.MemberQueryService;
+import tobyspring.splearn.application.member.required.EmailSender;
+import tobyspring.splearn.application.member.required.MemberRepository;
 import tobyspring.splearn.domain.shared.Email;
 import tobyspring.splearn.domain.member.Member;
 import tobyspring.splearn.domain.MemberFixture;

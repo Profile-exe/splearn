@@ -1,4 +1,4 @@
-package tobyspring.splearn.application.required;
+package tobyspring.splearn.application.member.required;
 
 import java.util.Optional;
 import org.springframework.data.repository.Repository;

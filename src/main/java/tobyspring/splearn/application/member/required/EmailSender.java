@@ -1,4 +1,4 @@
-package tobyspring.splearn.application.required;
+package tobyspring.splearn.application.member.required;
 
 import tobyspring.splearn.domain.shared.Email;
 

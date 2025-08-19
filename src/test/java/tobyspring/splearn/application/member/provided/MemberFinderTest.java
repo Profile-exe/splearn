@@ -1,4 +1,4 @@
-package tobyspring.splearn.application.provided;
+package tobyspring.splearn.application.member.provided;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

@@ -1,4 +1,4 @@
-package tobyspring.splearn.application.required;
+package tobyspring.splearn.application.member.required;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

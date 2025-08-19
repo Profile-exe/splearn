@@ -1,13 +1,13 @@
-package tobyspring.splearn.application;
+package tobyspring.splearn.application.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import tobyspring.splearn.application.provided.MemberFinder;
-import tobyspring.splearn.application.provided.MemberRegister;
-import tobyspring.splearn.application.required.EmailSender;
-import tobyspring.splearn.application.required.MemberRepository;
+import tobyspring.splearn.application.member.provided.MemberFinder;
+import tobyspring.splearn.application.member.provided.MemberRegister;
+import tobyspring.splearn.application.member.required.EmailSender;
+import tobyspring.splearn.application.member.required.MemberRepository;
 import tobyspring.splearn.domain.member.DuplicateEmailException;
 import tobyspring.splearn.domain.shared.Email;
 import tobyspring.splearn.domain.member.Member;
