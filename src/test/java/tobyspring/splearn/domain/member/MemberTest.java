@@ -22,13 +22,17 @@ class MemberTest {
     @Test
     void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
     void activate() {
+        assertThat(member.getDetail().getActivatedAt()).isNull();
+
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @Test
@@ -47,6 +51,7 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
@@ -96,5 +101,17 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.isActive()).isFalse();
+    }
+
+    @Test
+    void updateInfo() {
+        member.activate();
+
+        var request = new MemberInfoUpdateRequest("omg", "profile123", "자기소개");
+        member.updateInfo(request);
+
+        assertThat(member.getNickname()).isEqualTo(request.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(request.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(request.introduction());
     }
 }

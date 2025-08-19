@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import tobyspring.splearn.domain.member.Member;
+import tobyspring.splearn.domain.member.MemberStatus;
 
 @DataJpaTest
 class MemberRepositoryTest {
@@ -31,6 +32,12 @@ class MemberRepositoryTest {
         assertThat(member.getId()).isNotNull();
 
         entityManager.flush();
+        entityManager.clear();
+
+        Member found = memberRepository.findById(member.getId()).orElseThrow();
+
+        assertThat(found.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(found.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
@@ -40,6 +47,6 @@ class MemberRepositoryTest {
 
         Member member2 = Member.register(createMemberRegisterRequest(), createPasswordEncoder());
         assertThatThrownBy(() -> memberRepository.save(member2))
-            .isInstanceOf(DataIntegrityViolationException.class);
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 }
