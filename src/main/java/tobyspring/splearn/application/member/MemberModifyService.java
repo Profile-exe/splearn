@@ -10,6 +10,7 @@ import tobyspring.splearn.application.member.required.EmailSender;
 import tobyspring.splearn.application.member.required.MemberRepository;
 import tobyspring.splearn.domain.member.DuplicateEmailException;
 import tobyspring.splearn.domain.member.Member;
+import tobyspring.splearn.domain.member.MemberInfoUpdateRequest;
 import tobyspring.splearn.domain.member.MemberRegisterRequest;
 import tobyspring.splearn.domain.member.PasswordEncoder;
 import tobyspring.splearn.domain.shared.Email;
@@ -37,6 +38,16 @@ public class MemberModifyService implements MemberRegister {
         return member;
     }
 
+    private void checkDuplicateEmail(MemberRegisterRequest registerRequest) {
+        if (memberRepository.findByEmail(new Email(registerRequest.email())).isPresent()) {
+            throw new DuplicateEmailException("이미 사용중인 이메일입니다: " + registerRequest.email());
+        }
+    }
+
+    private void sendWelcomeEmail(Member member) {
+        emailSender.send(member.getEmail(), "등록을 완료해주세요", "아래 링크를 클릭해서 등록을 완료해주세요");
+    }
+
     @Override
     public Member activate(Long memberId) {
         Member member = memberFinder.find(memberId);
@@ -46,13 +57,21 @@ public class MemberModifyService implements MemberRegister {
         return memberRepository.save(member);
     }
 
-    private void checkDuplicateEmail(MemberRegisterRequest registerRequest) {
-        if (memberRepository.findByEmail(new Email(registerRequest.email())).isPresent()) {
-            throw new DuplicateEmailException("이미 사용중인 이메일입니다: " + registerRequest.email());
-        }
+    @Override
+    public Member deactivate(Long memberId) {
+        Member member = memberFinder.find(memberId);
+
+        member.deactivate();
+
+        return memberRepository.save(member);
     }
 
-    private void sendWelcomeEmail(Member member) {
-        emailSender.send(member.getEmail(), "등록을 완료해주세요", "아래 링크를 클릭해서 등록을 완료해주세요");
+    @Override
+    public Member updateInfo(Long memberId, MemberInfoUpdateRequest memberInfoUpdateRequest) {
+        Member member = memberFinder.find(memberId);
+
+        member.updateInfo(memberInfoUpdateRequest);
+
+        return memberRepository.save(member);
     }
 }
