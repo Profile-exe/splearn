@@ -38,17 +38,23 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
         assertThatThrownBy(() -> memberRegister.register(memberRegisterRequest))
                 .isInstanceOf(DuplicateEmailException.class);
     }
-    
+
     @Test
     void activate() {
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        entityManager.flush();  // IDENTITY 채번 전략으로 MySQL에서는 flush 없이도 insert 쿼리가 나감 (save 호출 시 persist 에서 insert 쿼리 나감)
-        entityManager.clear();
+        Member member = registerMember();
 
         member = memberRegister.activate(member.getId());
         entityManager.flush();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
+    }
+
+    private Member registerMember() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();  // IDENTITY 채번 전략으로 MySQL에서는 flush 없이도 insert 쿼리가 나감 (save 호출 시 persist 에서 insert 쿼리 나감)
+        entityManager.clear();
+        return member;
     }
 
     @Test
@@ -61,5 +67,34 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
     private void checkValidation(MemberRegisterRequest invalidRequest) {
         assertThatThrownBy(() -> memberRegister.register(invalidRequest))
                 .isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void deactivate() {
+        Member member = registerMember();
+
+        memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegister.deactivate(member.getId());
+        entityManager.flush();
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
+    }
+
+    @Test
+    void updateInfo() {
+        Member member = registerMember();
+
+        memberRegister.activate(member.getId());
+        entityManager.flush();
+        entityManager.clear();
+
+        var updateRequest = MemberFixture.createMemberInfoUpdateRequest();
+        member = memberRegister.updateInfo(member.getId(), updateRequest);
+
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(updateRequest.profileAddress());
     }
 }

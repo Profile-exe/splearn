@@ -5,6 +5,10 @@ public class MemberFixture {
         return new MemberRegisterRequest("test@splearn.app", "DDING", "verysecret");
     }
 
+    public static MemberInfoUpdateRequest createMemberInfoUpdateRequest() {
+        return new MemberInfoUpdateRequest("Peter", "peter123", "자기소개");
+    }
+
     public static PasswordEncoder createPasswordEncoder() {
         return new PasswordEncoder() {
             @Override
