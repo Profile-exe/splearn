@@ -25,6 +25,6 @@ class EmailTest {
     @Test
     void invalidEmail() {
         assertThatThrownBy(() -> new Email("invalid email"))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
