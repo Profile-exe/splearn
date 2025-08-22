@@ -9,10 +9,12 @@ import tobyspring.splearn.application.member.provided.MemberRegister;
 import tobyspring.splearn.application.member.required.EmailSender;
 import tobyspring.splearn.application.member.required.MemberRepository;
 import tobyspring.splearn.domain.member.DuplicateEmailException;
+import tobyspring.splearn.domain.member.DuplicateProfileException;
 import tobyspring.splearn.domain.member.Member;
 import tobyspring.splearn.domain.member.MemberInfoUpdateRequest;
 import tobyspring.splearn.domain.member.MemberRegisterRequest;
 import tobyspring.splearn.domain.member.PasswordEncoder;
+import tobyspring.splearn.domain.member.Profile;
 import tobyspring.splearn.domain.shared.Email;
 
 @Service
@@ -70,8 +72,22 @@ public class MemberModifyService implements MemberRegister {
     public Member updateInfo(Long memberId, MemberInfoUpdateRequest memberInfoUpdateRequest) {
         Member member = memberFinder.find(memberId);
 
+        checkDuplicateProfile(member, memberInfoUpdateRequest.profileAddress());
+
         member.updateInfo(memberInfoUpdateRequest);
 
         return memberRepository.save(member);
+    }
+
+    private void checkDuplicateProfile(Member member, String profileAddress) {
+        if (profileAddress.isEmpty())
+            return;
+
+        Profile profile = member.getDetail().getProfile();
+        if (profile != null && profile.address().equals(profileAddress)) return;
+
+        if (memberRepository.findByProfile((new Profile(profileAddress))).isPresent()) {
+            throw new DuplicateProfileException("이미 존재하는 프로필 주소입니: " + profileAddress);
+        }
     }
 }
