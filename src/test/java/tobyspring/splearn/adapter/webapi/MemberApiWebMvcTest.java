@@ -21,7 +21,7 @@ import tobyspring.splearn.domain.member.MemberRegisterRequest;
 
 @WebMvcTest(MemberApi.class)
 @RequiredArgsConstructor
-class MemberApiTest {
+class MemberApiWebMvcTest {
     final MockMvcTester mvcTester;
     final ObjectMapper objectMapper;
 
