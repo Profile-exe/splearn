@@ -1,4 +1,4 @@
-package tobyspring.splearn.domain;
+package tobyspring.splearn.domain.shared;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
@@ -25,6 +25,6 @@ class EmailTest {
     @Test
     void invalidEmail() {
         assertThatThrownBy(() -> new Email("invalid email"))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

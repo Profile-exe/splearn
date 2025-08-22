@@ -1,4 +1,4 @@
-package tobyspring.splearn.domain;
+package tobyspring.splearn.domain.member;
 
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
@@ -9,10 +9,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
+import tobyspring.splearn.domain.AbstractEntity;
+import tobyspring.splearn.domain.shared.Email;
 
 @Entity
 @Getter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends AbstractEntity {
     @NaturalId
@@ -24,6 +26,8 @@ public class Member extends AbstractEntity {
 
     private MemberStatus status;
 
+    private MemberDetail detail;
+
     public static Member register(MemberRegisterRequest registerRequest, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
@@ -33,6 +37,8 @@ public class Member extends AbstractEntity {
 
         member.status = MemberStatus.PENDING;
 
+        member.detail = MemberDetail.create();
+
         return member;
     }
 
@@ -40,20 +46,26 @@ public class Member extends AbstractEntity {
         state(MemberStatus.PENDING == status, "PENDING 상태가 아닙니다");
 
         this.status = MemberStatus.ACTIVE;
+        this.detail.activate();
     }
 
     public void deactivate() {
         state(MemberStatus.ACTIVE == status, "ACTIVE 상태가 아닙니다");
 
         this.status = MemberStatus.DEACTIVATED;
+        this.detail.deactivate();
     }
 
     public boolean verifyPassword(String password, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(password, this.passwordHash);
     }
 
-    public void changeNickname(String nickname) {
-        this.nickname = requireNonNull(nickname);
+    public void updateInfo(MemberInfoUpdateRequest updateRequest) {
+        state(MemberStatus.ACTIVE == status, "ACTIVE 상태가 아닙니다");
+
+        this.nickname = requireNonNull(updateRequest.nickname());
+
+        this.detail.updateInfo(updateRequest);
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
