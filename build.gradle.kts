@@ -40,11 +40,13 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     annotationProcessor("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit-pioneer:junit-pioneer:2.3.0")
     testImplementation("org.mockito:mockito-core:5.19.0")
 
+    testCompileOnly("org.projectlombok:lombok")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     mockitoAgent("org.mockito:mockito-core:5.19.0") { isTransitive = false }
